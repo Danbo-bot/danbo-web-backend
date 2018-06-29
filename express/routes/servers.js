@@ -29,8 +29,7 @@ router.get('/:id', async function(req, res, next) {
         where: {server_id: foundServer.server_id},
         order: [['level_gained', 'DESC']],
     });
-    if (!allUsers) { res.status(500).send('Couldn\'t find users or rewards')}
-    console.log(`.${allUsers}\n\n${allRewards}`)
+    if (!allUsers) { res.status(500).send('Couldn\'t find users or rewards')};
     res.status(200).send(JSON.stringify({
         'id': foundServer.server_id,
         'rewards': allRewards,
