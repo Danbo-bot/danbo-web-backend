@@ -30,11 +30,11 @@ router.get('/:id', async function(req, res, next) {
         order: [['level_gained', 'DESC']],
     })
     if (!allUsers) { res.status(500).send('Couldn\'t find users or rewards')}
-    res.status(200).send({
+    res.status(200).send(JSON.stringify({
         'id': foundServer.server_id,
         'rewards': allRewards,
         'users': allUsers
-    });
+    }));
 });
 
 module.exports = router;
