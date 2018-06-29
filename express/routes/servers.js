@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.get('/:id', function(req, res, next) {
+router.get('/:id', async function(req, res, next) {
     Servers.find({
         where:
         {
@@ -19,7 +19,8 @@ router.get('/:id', function(req, res, next) {
     ).then((foundServer) => {
         if (!foundServer) { 
             res.status(404).send('There isn\'t a server with that id in our database').end();
-            return; }
+            return; 
+        }
         allUsers = await Users.findAll({
             where: { server_id: foundServer.id},
             order: [['experience', 'DESC']],
