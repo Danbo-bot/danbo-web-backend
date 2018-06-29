@@ -27,7 +27,7 @@ router.get('/:id', async function(req, res, next) {
     });
     allRewards = await Rewards.findAll({
         where: {server_id: foundServer.server_id},
-        order: [['level_attained', 'DESC']],
+        order: [['level_gained', 'DESC']],
     })
     if (!allUsers) { res.status(500).send('Couldn\'t find users or rewards')}
     res.status(200).send({
