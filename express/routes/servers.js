@@ -22,7 +22,7 @@ router.get('/:id', async function(req, res, next) {
         return; 
     }
     allUsers = await Users.findAll({
-        where: { server_id: foundServer.id},
+        where: { server_id: foundServer.server_id},
         order: [['experience', 'DESC']],
     });
     allRewards = await Rewards.findAll({
