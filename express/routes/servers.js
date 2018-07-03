@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const { Servers, Users, Rewards } = require('../dbObjects');
+const { Servers, Users, Rewards, Blacklisted } = require('../dbObjects');
 
 /* GET listing. */
 router.get('/', function(req, res, next) {
@@ -29,10 +29,15 @@ router.get('/:id', async function(req, res, next) {
         where: {server_id: foundServer.server_id},
         order: [['level_gained', 'DESC']],
     });
+    allBlacklist = await Blacklisted.findAll({
+        where: {server_id: foundServer.server_id},
+    });
     if (!allUsers) { res.status(500).send('Couldn\'t find users or rewards')};
     res.status(200).send(JSON.stringify({
         'id': foundServer.server_id,
+        'name': foundServer.server_name,
         'rewards': allRewards,
+        'blacklisted': allBlacklist,
         'users': allUsers
     }));
 });
