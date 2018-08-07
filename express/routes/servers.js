@@ -60,11 +60,11 @@ router.get('/:id/user/:userId', async function(req, res, next) {
     if (!foundUser) { return res.status(404).send('Couldn\'t find user on server')}
     let responseObj = {};
     responseObj['server'] = foundServer;
-    responseObj['server']['rewards'] = await Rewards.findAll({
+    responseObj['server']['dataValues']['rewards'] = await Rewards.findAll({
         where: {server_id: foundServer.server_id},
         order: [['level_gained', 'DESC']],
     });
-    responseObj['server']['blacklist'] = await Blacklisted.findAll({
+    responseObj['server']['dataValues']['blacklist'] = await Blacklisted.findAll({
         where: {server_id: foundServer.server_id},
     });
     responseObj['user'] = foundUser;
