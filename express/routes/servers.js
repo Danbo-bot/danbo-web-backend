@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:id', async function(req, res, next) {
-    foundServer = await Servers.find({
+    let foundServer = await Servers.find({
         where:
         {
             server_id: req.params.id,
@@ -42,4 +42,32 @@ router.get('/:id', async function(req, res, next) {
     }));
 });
 
+router.get('/:id/user/:userId', async function(req, res, next) {
+    let foundServer = await Servers.find({
+        where: {
+            server_id: req.params.id,
+        }
+    }).catch((err) => {
+        console.error(err)}
+    );
+    if (!foundServer) { 
+        res.status(404).send('There isn\'t a server with that id in our database').end();
+        return; 
+    }
+    let foundUser = await Users.find({
+        where: { server_id: foundServer.server_id, id: req.params.userId }
+    });
+    if (!foundUser) { return res.status(404).send('Couldn\'t find user on server')}
+    let responseObj = {};
+    responseObj['server'] = foundServer;
+    responseObj['server']['rewards'] = await Rewards.findAll({
+        where: {server_id: foundServer.server_id},
+        order: [['level_gained', 'DESC']],
+    });
+    responseObj['server']['blacklist'] = await Blacklisted.findAll({
+        where: {server_id: foundServer.server_id},
+    });
+    responseObj['user'] = foundUser;
+    return res.status(200).send(responseObj).end();
+});
 module.exports = router;
